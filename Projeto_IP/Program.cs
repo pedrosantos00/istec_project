@@ -124,20 +124,36 @@ namespace Projeto_IP
 
         private static void ListarJogadores()
         {
-          
+            Console.WriteLine("Lista de Jogadores");
+            foreach (Jogador jogador in Jogadores)
+            {
+                Console.WriteLine($"\n{jogador.Nome} | {jogador.TotalJogos} | {jogador.TotalVitorias}");
+            }
+            Console.WriteLine("");
         }
-
-
-
 
         private static void RemoverJogador()
         {
-          
+            Console.WriteLine("Remover Jogador");
+            Console.WriteLine("Qual o jogador que deseja remover ?");
+            string jogadorARemover = Console.ReadLine();
+            Jogador jogadorDaListaARemover = Jogadores.Find(x => x.Nome.Contains(jogadorARemover));
+            if (jogadorDaListaARemover != null)
+            {
+                Jogadores.Remove(jogadorDaListaARemover);
+                Console.WriteLine("O jogador foi removido com sucesso!");
+                Console.WriteLine("");
+            }
         }
 
         private static void RegistarJogador()
         {
-           
+            Console.WriteLine("Registar Jogador");
+            Console.WriteLine("Insira o nome do jogador a adicionar:");
+            Jogador novoJogador = new Jogador(Console.ReadLine(),0,0);
+            Jogadores.Add(novoJogador);
+            Console.WriteLine("O jogador foi adicionado com sucesso!");
+            Console.WriteLine("");
         }
     }
 }
