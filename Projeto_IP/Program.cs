@@ -8,6 +8,7 @@ namespace Projeto_IP
         public static Tabuleiro Tabuleiro = new Tabuleiro();
         static void Main(string[] args)
         {
+            Console.WriteLine("demo");
             Console.WriteLine("---------------------");
             Console.WriteLine("N em Linha");
             Console.WriteLine("---------------------\n");
