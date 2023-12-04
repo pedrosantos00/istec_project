@@ -12,7 +12,7 @@ namespace Projeto_IP
         public bool EstaEmJogo { get; set; } = false;
         public int TotalJogos { get; set; } = 0;
         public int TotalVitorias { get; set; } = 0;
-
+        public int PecasEspeciaisDisponveis { get; set; } = 0;
         public Jogador() { }
         public Jogador(string nome)
         {
