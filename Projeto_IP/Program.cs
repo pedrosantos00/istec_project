@@ -4,155 +4,153 @@ namespace Projeto_IP
 {
     internal class Program
     {
-        public static List<Jogador> Jogadores = new List<Jogador>();
-        public static Tabuleiro Tabuleiro = new Tabuleiro();
+        public static List<Player> Players = new List<Player>();
+        public static Board Board = new Board();
         static void Main(string[] args)
         {
             Console.WriteLine("---------------------");
-            Console.WriteLine("N em Linha");
+            Console.WriteLine("Inline N");
             Console.WriteLine("---------------------\n");
-            Console.WriteLine("Projeto Realizado por:\n->Carolyne Rocha - 202309\n->Isaac Macieira - 2022089\n->Jeovani Cosme - 2023016\n->Pedro Santos -2023010");
+            Console.WriteLine("Project done by :\n->Carolyne Rocha - 202309\n->Isaac Macieira - 2022089\n->Jeovani Cosme - 2023016\n->Pedro Santos -2023010");
             Console.WriteLine("\n---------------------\n\n");
-            CriarJogadores();
+            //CreatePlayer();
             Menu();
         }
 
-        private static void CriarJogadores()
+        private static void CreatePlayer()
         {
-            Jogadores.Add(new Jogador("Pedro", 2231,51));
-            Jogadores.Add(new Jogador("Joao", 21,5));
-            Jogadores.Add(new Jogador("Ricardo", 221,51));
-            Jogadores.Add(new Jogador("Esteves", 231,51));
-            Jogadores.Add(new Jogador("Rita", 2,5));
-            Jogadores.Add(new Jogador("Catarina", 2231,51));
-            Jogadores.Add(new Jogador("Ana", 211,51));
-            Jogadores.Add(new Jogador("Jeovani", 2231,51));
-            Jogadores.Add(new Jogador("Ines", 2231,51));
+            Players.Add(new Player("Pedro", 2231,51));
+            Players.Add(new Player("Joao", 21,5));
+            Players.Add(new Player("Ricardo", 221,51));
+            Players.Add(new Player("Esteves", 231,51));
+            Players.Add(new Player("Rita", 2,5));
+            Players.Add(new Player("Catarina", 2231,51));
+            Players.Add(new Player("Ana", 211,51));
+            Players.Add(new Player("Jeovani", 2231,51));
+            Players.Add(new Player("Ines", 2231,51));
         }
 
         public static void Menu()
         {
-            string resposta;
+            string userInput;
             do
             {
-                Console.Write("Menu Jogo:\n");
+                Console.Write("Game Menu:\n");
                 Console.WriteLine("" +
-                    "RJ- REGISTAR JOGADOR\n" +
-                    "EJ- REMOVER JOGADOR\n" +
-                    "LJ- LISTAR JOGADORES\n" +
-                    "IJ- INICIAR JOGO\n" +
-                    "DJ- DETALHES JOGO\n" +
-                    "D-  DESISTIR\n" +
-                    "CP- COLOCAR PEÇA\n" +
-                    "V-  VISUALIZAR JOGO\n" +
-                    "S-  SAIR");
+                    "RJ- ADD PLAYER\n" +
+                    "EJ- REMOVE PLAYER\n" +
+                    "LJ- LIST PLAYERS\n" +
+                    "IJ- PLAY GAME\n" +
+                    "DJ- GAME STATS\n" +
+                    "D-  GIVE UP\n" +
+                    "CP- MAKE A MOVE\n" +
+                    "V-  DISPLAY GAME\n" +
+                    "S-  QUIT");
 
-                Console.Write("Escolha uma opçao do menu -> ");
-                 resposta = Console.ReadLine().ToUpper();
-                switch (resposta)
+                Console.Write("Select a menu option -> ");
+                 userInput = Console.ReadLine().ToUpper();
+                switch (userInput)
                 {
                     case "RJ":
                         Console.Clear();    
-                        RegistarJogador();
+                        AddPlayer();
                         break;
                     case "EJ":
                         Console.Clear();
-                        RemoverJogador();
+                        RemovePlayer();
                         break;
-                        Console.Clear();
                     case "LJ":
                         Console.Clear();
-                        ListarJogadores();
+                        ListPlayer();
                         break;
                     case "IJ":
                         Console.Clear();
-                        IniciarJogo();
+                        PlayGame();
                         break;
                     case "DJ":
                         Console.Clear();
-                        DetalhesJogo();
+                        GameStats();
                         break;
                     case "D":
                         Console.Clear();
-                        DesistirJogo();
+                        GiveUp();
                         break;
                     case "CP":
                         Console.Clear();
-                        EfetuarJogada();
+                        MakeAMove();
                         break;
                     case "V":
                         Console.Clear();
-                        VisualizarResultado();
+                        DisplayGame();
                         break;
                     case "S":
                         break;
                     default:
                         Console.Clear();
-                        Console.WriteLine("Introduza uma resposta valida... \n\n");
-                        resposta = "";
+                        Console.WriteLine("Please,check your answer... \n\n");
+                        userInput = "";
                         break;
 
                 }
 
-            }while (resposta != "S");
+            }while (userInput != "S");
         }
 
-        private static void VisualizarResultado()
+        private static void DisplayGame()
         {
             throw new NotImplementedException();
         }
 
-        private static void EfetuarJogada()
+        private static void MakeAMove()
         {
             throw new NotImplementedException();
         }
 
-        private static void DesistirJogo()
+        private static void GiveUp()
         {
             throw new NotImplementedException();
         }
 
-        private static void DetalhesJogo()
+        private static void GameStats()
         {
             throw new NotImplementedException();
         }
 
-        private static void IniciarJogo()
+        private static void PlayGame()
         {
             throw new NotImplementedException();
         }
 
-        private static void ListarJogadores()
+        private static void ListPlayer()
         {
-            Console.WriteLine("Lista de Jogadores");
-            foreach (Jogador jogador in Jogadores)
+            Console.WriteLine("Players List");
+            foreach (Player player in Players)
             {
-                Console.WriteLine($"\n{jogador.Nome} | {jogador.TotalJogos} | {jogador.TotalVitorias}");
+                Console.WriteLine($"\n{player.Name,15}");
             }
-            Console.WriteLine("");
         }
 
-        private static void RemoverJogador()
+        private static void RemovePlayer()
         {
-            Console.WriteLine("Remover Jogador");
-            Console.WriteLine("Qual o jogador que deseja remover ?");
-            string jogadorARemover = Console.ReadLine();
-            Jogador jogadorDaListaARemover = Jogadores.Find(x => x.Nome.Contains(jogadorARemover));
-            if (jogadorDaListaARemover != null)
+            Console.WriteLine("Remove Player");
+            Console.WriteLine("Which player do you want to remove?");
+            string playerToRemove = Console.ReadLine();
+            Player listPlayerToRemove = Players.Find(x => x.Name.Contains(playerToRemove));
+            if (listPlayerToRemove != null)
             {
-                Jogadores.Remove(jogadorDaListaARemover);
-                Console.WriteLine("O jogador foi removido com sucesso!");
+                Players.Remove(listPlayerToRemove);
+                Console.WriteLine("The player was removed!");
                 Console.WriteLine("");
             }
         }
 
-        private static void RegistarJogador()
+        private static void AddPlayer()
         {
-            Console.WriteLine("Registar Jogador");
-            Console.WriteLine("Insira o nome do jogador a adicionar:");
-            Jogador novoJogador = new Jogador(Console.ReadLine(),0,0);
-            Jogadores.Add(novoJogador);
-            Console.WriteLine("O jogador foi adicionado com sucesso!");
+            Console.WriteLine("Create Player");
+            Console.WriteLine("What´s the player name ?:");
+            Player novoJogador = new Player(Console.ReadLine(),0,0);
+            Players.Add(novoJogador);
+            Console.WriteLine("Player added successfully!");
             Console.WriteLine("");
         }
     }
