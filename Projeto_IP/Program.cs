@@ -28,7 +28,7 @@ namespace Projeto_IP
         /// </summary>
         private static void StartGameTester()
         {
-            Game.GameBoard = new int[10, 10];
+            Game.GameBoard = new int[5, 5];
             
             Game.Player1 = Players.ElementAt(0);
             Game.Player2 = Players.ElementAt(1);
@@ -36,8 +36,8 @@ namespace Projeto_IP
             Game.Player2.EspecialPiecesAvaiable = 2;
             Game.Player1.IsInGame = true;
             Game.Player1.IsInGame = true;
-            Game.SequenceToWin = 5;
-            Game.SpecialPieceLenght = 4;
+            Game.SequenceToWin = 4;
+            Game.SpecialPieceLenght = 2;
             Game.InGame = true;
 
         }
@@ -47,15 +47,15 @@ namespace Projeto_IP
         /// </summary>
         private static void CreatePlayersTester()
         {
-            Players.Add(new Player("Pedro", 2231,51, 3));
-            Players.Add(new Player("Joao", 21,5, 2));
-            Players.Add(new Player("Ricardo", 221,51, 3));
-            Players.Add(new Player("Esteves", 231,51, 3));
-            Players.Add(new Player("Rita", 2,5, 3));
-            Players.Add(new Player("Catarina", 2231,51, 3));
-            Players.Add(new Player("Ana", 211,51, 3));
-            Players.Add(new Player("Jeovani", 2231,51, 3));
-            Players.Add(new Player("Ines", 2231,51,5));
+            Players.Add(new Player("Pedro"));
+            Players.Add(new Player("Joao"));
+            Players.Add(new Player("Ricardo"));
+            Players.Add(new Player("Esteves"));
+            Players.Add(new Player("Rita"));
+            Players.Add(new Player("Catarina"));
+            Players.Add(new Player("Ana"));
+            Players.Add(new Player("Jeovani"));
+            Players.Add(new Player("Ines"));
         }
 
         /// <summary>
@@ -80,6 +80,9 @@ namespace Projeto_IP
 
                 Console.Write("Escolha uma opçao do menu -> ");
                  input = Console.ReadLine().ToUpper();
+                try
+                {
+
                 switch (input)
                 {
                     case "RJ":
@@ -112,7 +115,7 @@ namespace Projeto_IP
                         break;
                     case "V":
                         Console.Clear();
-                        VisualizarResultado();
+                        CheckBoard();
                         break;
                     case "S":
                         break;
@@ -123,8 +126,16 @@ namespace Projeto_IP
                         break;
 
                 }
+                }
+                catch
+                {
+                    Console.WriteLine("Algo correu mal...");
+                    Console.Write("\n\nPrima qualquer tecla para continuar...");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
 
-            }while (input != "S");
+            } while (input != "S");
         }
 
         /// <summary>
@@ -132,9 +143,21 @@ namespace Projeto_IP
         /// cada posição.As posições são mostradas de cima para baixo, da esquerda para a direita, indicando
         /// linha, coluna, e conteúdo.
         /// </summary>
-        private static void VisualizarResultado()
+        private static void CheckBoard()
         {
-            throw new NotImplementedException();
+            if (!Game.InGame)
+            {
+                Console.WriteLine("Não esta a decorrer qualquer jogo...");
+                Console.Write("\n\nPrima qualquer tecla para continuar...");
+                Console.ReadKey();
+                Console.Clear();
+                return;
+            }
+
+            DisplayBoardWithSelection(-1);
+            Console.Write("\n\nPrima qualquer tecla para continuar...");
+            Console.ReadKey();
+            Console.Clear();
         }
 
         /// <summary>
@@ -147,8 +170,158 @@ namespace Projeto_IP
         /// </summary>
         private static void MakeAMove()
         {
-            throw new NotImplementedException();
+            if (!Game.InGame)
+            {
+                Console.WriteLine("Não está a decorrer qualquer jogo...");
+                Console.Write("\n\nPrima qualquer tecla para continuar...");
+                Console.ReadKey();
+                Console.Clear();
+                return;
+            }
+
+            ConsoleKeyInfo key;
+            int selectedColumn = 0;
+            bool usingSpecialPiece = false;
+            char direction = 'D'; // Direção default =  direita ('D' para direita, 'E' para esquerda)
+            do
+            {
+                Console.Clear();
+                string specialPiece = usingSpecialPiece ? "Ativado" : "Desativado";
+                Player currentPlayer = Game.PlayerMove ? Game.Player2 : Game.Player1;
+                DisplayBoardWithSelection(selectedColumn);
+                Console.WriteLine($"\nÉ a vez de {currentPlayer.Name}. Use as setas <- | -> para escolher uma coluna e pressione Enter para colocar a peça.");
+                Console.WriteLine($"\nPEÇA ESPECIAL: {specialPiece} => Pressione 'P' para usar uma peça especial. ");
+                if (usingSpecialPiece)
+                {
+                    Console.WriteLine($"\nPeças especiais disponíveis: {currentPlayer.EspecialPiecesAvaiable}.");
+                    Console.WriteLine($"Pressione 'D' para a direita ou 'E' para a esquerda após selecionar a peça especial. Posicção Atual : {direction}");
+                }
+                Console.WriteLine("\nPressione 'Q' para sair do menu.");
+
+
+                switch (Console.ReadKey().Key)
+                {
+                    case ConsoleKey.Q:
+                        Console.Clear();
+                        return; // Sai do jogo
+                    case ConsoleKey.P:
+                        usingSpecialPiece = !usingSpecialPiece;
+                        break;
+                    case ConsoleKey.D:
+                        direction = 'R'; // Muda direção para direita
+                        break;
+                    case ConsoleKey.E:
+                        direction = 'E'; // Muda direção para esquerda
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        selectedColumn = Math.Max(0, selectedColumn - 1);
+                        break;
+                    case ConsoleKey.RightArrow:
+                        selectedColumn = Math.Min(Game.GameBoard.GetLength(1) - 1, selectedColumn + 1);
+                        break;
+                    case ConsoleKey.Enter:
+                        PlacePiece(selectedColumn, currentPlayer, usingSpecialPiece, direction);
+                        int gameResult = Game.CheckForWinOrDraw();
+                        if (gameResult != 0)
+                        {
+                            DisplayBoardWithSelection(-1); // Mostra o estado final da Board
+                            if (gameResult == 1) // Vitória
+                            {
+                                string winnerName = Game.PlayerMove ? Game.Player2.Name : Game.Player1.Name;
+                                Console.WriteLine($"\n{winnerName} venceu! Pressione qualquer tecla para retornar ao menu.");
+                            }
+                            else if (gameResult == 2) // Empate
+                            {
+                                Console.WriteLine("\nEmpate! Pressione qualquer tecla para retornar ao menu.");
+                            }
+
+                            Console.ReadKey();
+                            Console.Clear();
+
+                            Game.InGame = false;
+                            return; // Termina o jogo
+                        }
+                        usingSpecialPiece = false;
+                        Game.PlayerMove = !Game.PlayerMove;
+                        break;
+                }
+            } while (true); // Continua até 'Q' ser pressionado ou o jogo termine
         }
+
+        private static void PlacePiece(int column, Player player, bool usingSpecialPiece, char direction)
+        {
+            if (usingSpecialPiece)
+            {
+                for (int i = 0; i < Game.SpecialPieceLenght; i++)
+                {
+                    int targetColumn = direction == 'D' ? (column + i) % Game.GameBoard.GetLength(1) : (column - i + Game.GameBoard.GetLength(1)) % Game.GameBoard.GetLength(1);
+                    DropPieceInColumn(targetColumn, player);
+                }
+                player.EspecialPiecesAvaiable--;
+            }
+            else
+            {
+                DropPieceInColumn(column, player);
+            }
+        }
+
+        private static void DropPieceInColumn(int column, Player player)
+        {
+            for (int i = Game.GameBoard.GetLength(0) - 1; i >= 0; i--)
+            {
+                if (Game.GameBoard[i, column] == 0)
+                {
+                    Game.GameBoard[i, column] = Game.PlayerMove ? 2 : 1;
+                    break;
+                }
+            }
+        }
+
+        private static void DisplayBoardWithSelection(int selectedColumn)
+        {
+            int columns = Game.GameBoard.GetLength(1);
+
+            Console.WriteLine($"Player 1: {Game.Player1.Name} (X)  -  Player 2: {Game.Player2.Name} (O)\n");
+            Console.Write("  ");
+            for (int j = 0; j < columns; j++)
+            {
+                Console.Write("+---");
+            }
+            Console.WriteLine("+");
+
+            for (int i = 0; i < Game.GameBoard.GetLength(0); i++)
+            {
+                Console.Write("  |");
+                for (int j = 0; j < columns; j++)
+                {
+                    char piece = Game.GameBoard[i, j] switch
+                    {
+                        1 => 'X',
+                        2 => '0',
+                        _ => ' '
+                    };
+                    Console.Write($" {piece} |");
+                }
+                Console.WriteLine();
+                Console.Write("  ");
+                for (int j = 0; j < columns; j++)
+                {
+                    Console.Write("+---");
+                }
+                Console.WriteLine("+");
+            }
+
+            Console.Write("   ");
+            for (int j = 1; j <= columns; j++)
+            {
+                Console.Write($" {j}  ");
+            }
+            Console.WriteLine();
+            if(selectedColumn != -1)
+            Console.WriteLine($"{' '.ToString().PadLeft(3 * selectedColumn + 3)}Column {selectedColumn + 1}");
+        }
+
+
 
         /// <summary>
         /// Um jogador pode desistir do jogo em curso do qual faz parte, pelo que o outro jogador
@@ -163,6 +336,7 @@ namespace Projeto_IP
             if(!Game.InGame)
             {
                 Console.WriteLine("Não esta a decorrer qualquer jogo...");
+               
                 return;
             }
 
