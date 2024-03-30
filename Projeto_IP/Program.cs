@@ -18,8 +18,8 @@ namespace Projeto_IP
             Console.WriteLine("---------------------\n");
             Console.WriteLine("Projeto Realizado por:\n->Carolyne Rocha - 202309\n->Isaac Macieira - 2022089\n->Jeovani Cosme - 2023016\n->Pedro Santos -2023010");
             Console.WriteLine("\n---------------------\n\n");
-            CreatePlayersTester();
-            StartGameTester();
+            //CreatePlayersTester();
+            //StartGameTester();
             Menu();
         }
 
@@ -211,6 +211,7 @@ namespace Projeto_IP
                         direction = 'R'; // Muda direção para direita
                         break;
                     case ConsoleKey.E:
+
                         direction = 'E'; // Muda direção para esquerda
                         break;
                     case ConsoleKey.LeftArrow:
